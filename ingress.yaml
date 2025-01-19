@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: share-ingress
+  namespace: share
+  labels:
+    name: share
+  annotations:
+    spec.ingressClassName: traefik
+spec:
+  rules:
+    - host: share.sysgwan.xyz
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: svc-app
+                port:
+                  number: 3000

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: share-app
+  namespace: share
+  labels:
+    name: share-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: share-app-pod
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: share-app-pod
+    spec:
+      containers:
+        - image: stonith404/pingvin-share
+          name: share-app
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1024M"
+          ports:
+            - containerPort: 3000
+              name: http
+          volumeMounts:
+            - mountPath: /opt/app/backend/data
+              name: data
+            - mountPath: /opt/app/frontend/public/img
+              name: images
+          env:
+            - name: TRUST_PROXY
+              value: "false"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: local-data-pvc
+        - name: images
+          persistentVolumeClaim:
+            claimName: local-images-pvc
