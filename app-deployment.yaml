@@ -41,7 +41,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: local-data-pvc
+            claimName: lh-app-pvc
         - name: images
           persistentVolumeClaim:
-            claimName: local-images-pvc
+            claimName: lh-images-pvc
